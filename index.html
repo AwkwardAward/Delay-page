@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wait a Moment...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #222;
+            color: white;
+        }
+        #countdown {
+            font-size: 48px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function startCountdown() {
+            const urlParams = new URLSearchParams(window.location.search);
+	    let seconds = urlParams.get('$S') || 300; // Default to 5 min if not provided
+            const targetURL = urlParams.get('$U');
+
+            function updateCountdown() {
+                if (seconds > 0) {
+                    document.getElementById("countdown").innerText = seconds;
+                    seconds--;
+                    setTimeout(updateCountdown, 1000);
+                } else {
+                    window.location.href = targetURL;
+                }
+            }
+            updateCountdown();
+        }
+    </script>
+</head>
+<body onload="startCountdown()">
+    <h1>Take a Deep Breath!</h1>
+    <p>Use this time to stretch, grab some water, or think if you really need to visit this site.</p>
+    <div id="countdown">300</div>
+</body>
+</html>
