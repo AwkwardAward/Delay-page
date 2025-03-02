@@ -20,7 +20,7 @@
     <script>
         function startCountdown() {
             const urlParams = new URLSearchParams(window.location.search);
-	    let seconds = urlParams.get('$S') || 10; // Default to 5 min if not provided
+	    let seconds = urlParams.get('$S') || 300; // Default to 5 min if not provided
             const targetURL = urlParams.get('$U');
 
             function updateCountdown() {
@@ -39,6 +39,6 @@
 <body onload="startCountdown()">
     <h1>Take a Deep Breath!</h1>
     <p>Use this time to stretch, grab some water, or think if you really need to visit this site.</p>
-    <div id="countdown">10</div>
+    <div id="countdown">300</div>
 </body>
 </html>
