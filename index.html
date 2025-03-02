@@ -20,17 +20,24 @@
     <script>
         function startCountdown() {
             const urlParams = new URLSearchParams(window.location.search);
-            let seconds = 10; // Default to 10 seconds
+            let seconds = 300; // Default is still 300 in case we get no valid input
             let targetURL = "https://www.youtube.com"; // Default redirect
 
-            // Try to extract the first number from the URL (likely the delay time)
+            let paramsDebug = "Detected parameters: <br>";
+
+            // Loop through parameters to check what we receive
             for (let [key, value] of urlParams.entries()) {
+                paramsDebug += `${key} = ${value} <br>`;
                 if (!isNaN(key)) { 
-                    seconds = parseInt(key); // If a number is found, set it as seconds
+                    seconds = parseInt(key); // If a number is found, use it as countdown
                 } else if (value.startsWith("http")) { 
-                    targetURL = value; // If a URL is found, set it as target
+                    targetURL = value; // If a URL is found, use it as the redirect link
                 }
             }
+
+            // Display detected values
+            document.getElementById("debug").innerHTML = paramsDebug;
+            document.getElementById("countdown").innerText = seconds;
 
             function updateCountdown() {
                 if (seconds > 0) {
@@ -48,6 +55,8 @@
 <body onload="startCountdown()">
     <h1>Take a Deep Breath!</h1>
     <p>Use this time to stretch, grab some water, or think if you really need to visit this site.</p>
-    <div id="countdown">10</div>
+    <div id="countdown">300</div>
+    <br>
+    <div id="debug" style="color: yellow;"></div> <!-- This will show detected parameters -->
 </body>
 </html>
