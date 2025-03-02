@@ -58,7 +58,8 @@
                     setTimeout(updateCountdown, 1000);
                 } else {
                     console.log(`🚀 Redirecting to: ${targetURL}`);
-                    window.location.href = targetURL;
+                    // Change window.location.href to window.location.replace for better reliability
+                    window.location.replace(targetURL);
                 }
             }
 
