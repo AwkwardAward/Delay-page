@@ -25,51 +25,44 @@
 
     <script>
         window.onload = function() {
-            console.log("🚀 Script loaded!");
-
-            // Check if the cookie is set
-            if (getCookie('visitedFromDelay') === 'true') {
-                console.log("❌ Already visited. Exiting.");
+            // Check if the page has been redirected previously
+            if (getCookie('redirected') === 'true') {
+                console.log("Already redirected, bypassing countdown...");
                 return;
             }
 
-            // Set a cookie to remember that we've visited this page
-            setCookie('visitedFromDelay', 'true', 1); // 1 day expiration
+            // Set a cookie to prevent future redirects
+            setCookie('redirected', 'true', 1); // Cookie expires after 1 day
 
             const urlParams = new URLSearchParams(window.location.search);
             let seconds = 10;  // Default countdown
             let targetURL = "https://www.youtube.com";  // Default URL
 
-            // Extract countdown and target URL
+            // Parse query parameters for countdown and target URL
             let params = Array.from(urlParams.keys());
-            console.log("🔍 Raw Parameters:", params);
-
             if (params.length >= 1 && !isNaN(params[0])) {
                 seconds = parseInt(params[0]);
-                console.log(`⏳ Countdown set to: ${seconds} seconds`);
             }
             if (params.length >= 2) {
                 targetURL = params[1];
-                console.log(`🎯 Target URL set to: ${targetURL}`);
             }
 
             function updateCountdown() {
                 let countdownElement = document.getElementById("countdown");
                 if (!countdownElement) {
-                    console.error("❌ Countdown element not found!");
+                    console.error("Countdown element not found!");
                     return;
                 }
 
                 if (seconds > 0) {
                     countdownElement.innerText = seconds;
-                    console.log(`⏳ Countdown: ${seconds}`);
                     seconds--;
                     setTimeout(updateCountdown, 1000);
                 } else {
-                    console.log(`🚀 Redirecting to: ${targetURL}`);
-                    // Clear the cookie after redirect
-                    setCookie('visitedFromDelay', '', -1);
-                    window.location.href = targetURL; // Redirect to target (YouTube)
+                    // Clear the 'redirected' cookie after the countdown ends
+                    setCookie('redirected', '', -1);
+                    console.log(`Redirecting to: ${targetURL}`);
+                    window.location.href = targetURL; // Redirect to target
                 }
             }
 
@@ -97,4 +90,3 @@
     </script>
 </body>
 </html>
-
