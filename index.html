@@ -31,7 +31,13 @@
             let seconds = 10;  // Default countdown
             let targetURL = "https://www.youtube.com";  // Default URL
 
-            // Extract countdown and target URL properly
+            // Check if we are coming from the delay page and prevent loops
+            if (urlParams.get('redirected') === 'true') {
+                console.log("❌ Already redirected to YouTube. Exiting.");
+                return;
+            }
+
+            // Extract countdown and target URL
             let params = Array.from(urlParams.keys());
             console.log("🔍 Raw Parameters:", params);
 
@@ -58,8 +64,8 @@
                     setTimeout(updateCountdown, 1000);
                 } else {
                     console.log(`🚀 Redirecting to: ${targetURL}`);
-                    // Change window.location.href to window.location.replace for better reliability
-                    window.location.replace(targetURL);
+                    // Adding 'redirected=true' to the URL before redirecting
+                    window.location.href = `${targetURL}?redirected=true`;
                 }
             }
 
