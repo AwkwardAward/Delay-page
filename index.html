@@ -24,49 +24,46 @@
     <div id="countdown">Loading...</div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {  // ✅ Ensure page is loaded first
-            console.log("Script loaded."); 
+        window.onload = function() {
+            console.log("🚀 Script loaded!");
 
             const urlParams = new URLSearchParams(window.location.search);
-            let seconds = 300; // Default countdown
-            let targetURL = "https://www.youtube.com"; // Default redirect
+            let seconds = 10;  // Default countdown
+            let targetURL = "https://www.youtube.com";  // Default URL
 
-            console.log("Reading parameters...");
-            let foundURL = false;
+            // Extract countdown and target URL properly
+            let params = Array.from(urlParams.keys());
+            console.log("🔍 Raw Parameters:", params);
 
-            for (let [key, value] of urlParams.entries()) {
-                console.log(`Param detected: ${key} = ${value}`);
-                
-                if (!isNaN(key)) { 
-                    seconds = parseInt(key);
-                    console.log(`Countdown set to: ${seconds} seconds`);
-                }
-                if (!foundURL && key.startsWith("http")) { 
-                    targetURL = key;
-                    foundURL = true;
-                    console.log(`Target URL set to: ${targetURL}`);
-                }
-                if (!foundURL && value.startsWith("http")) { 
-                    targetURL = value;
-                    foundURL = true;
-                    console.log(`Target URL set to: ${targetURL}`);
-                }
+            if (params.length >= 1 && !isNaN(params[0])) {
+                seconds = parseInt(params[0]);
+                console.log(`⏳ Countdown set to: ${seconds} seconds`);
             }
-
-            if (isNaN(seconds) || seconds < 1) {
-                console.log("Invalid countdown value. Defaulting to 10.");
-                seconds = 10;
+            if (params.length >= 2) {
+                targetURL = params[1];
+                console.log(`🎯 Target URL set to: ${targetURL}`);
             }
 
             function updateCountdown() {
                 let countdownElement = document.getElementById("countdown");
                 if (!countdownElement) {
-                    console.error("Countdown element not found!");  // 🔴 Debug if the element is missing
+                    console.error("❌ Countdown element not found!");
                     return;
                 }
-                
+
                 if (seconds > 0) {
                     countdownElement.innerText = seconds;
-                    console.log(`Countdown: ${seconds}`);
+                    console.log(`⏳ Countdown: ${seconds}`);
                     seconds--;
-                    setTimeout(upda
+                    setTimeout(updateCountdown, 1000);
+                } else {
+                    console.log(`🚀 Redirecting to: ${targetURL}`);
+                    window.location.href = targetURL;
+                }
+            }
+
+            updateCountdown();
+        };
+    </script>
+</body>
+</html>
