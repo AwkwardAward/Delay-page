@@ -20,22 +20,28 @@
     <script>
         function startCountdown() {
             const urlParams = new URLSearchParams(window.location.search);
-            let seconds = 300; // Default is still 300 in case we get no valid input
+            let seconds = 300; // Default countdown
             let targetURL = "https://www.youtube.com"; // Default redirect
 
             let paramsDebug = "Detected parameters: <br>";
 
-            // Loop through parameters to check what we receive
             for (let [key, value] of urlParams.entries()) {
                 paramsDebug += `${key} = ${value} <br>`;
+
+                // If the key is a number, use it as the countdown
                 if (!isNaN(key)) { 
-                    seconds = parseInt(key); // If a number is found, use it as countdown
-                } else if (value.startsWith("http")) { 
-                    targetURL = value; // If a URL is found, use it as the redirect link
+                    seconds = parseInt(key);
+                }
+                // If the key is a URL (LeechBlock's format), use it as the redirect
+                if (key.startsWith("http")) { 
+                    targetURL = key;
+                }
+                // If the value is a URL (normal format), use it as the redirect
+                if (value.startsWith("http")) { 
+                    targetURL = value;
                 }
             }
 
-            // Display detected values
             document.getElementById("debug").innerHTML = paramsDebug;
             document.getElementById("countdown").innerText = seconds;
 
@@ -45,7 +51,7 @@
                     seconds--;
                     setTimeout(updateCountdown, 1000);
                 } else {
-                    window.location.href = targetURL;
+                    window.location.href = targetURL; // 🔥 Redirect properly
                 }
             }
             updateCountdown();
@@ -57,6 +63,6 @@
     <p>Use this time to stretch, grab some water, or think if you really need to visit this site.</p>
     <div id="countdown">300</div>
     <br>
-    <div id="debug" style="color: yellow;"></div> <!-- This will show detected parameters -->
+    <div id="debug" style="color: yellow;"></div> <!-- Debugging output -->
 </body>
 </html>
