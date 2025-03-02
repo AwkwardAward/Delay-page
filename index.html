@@ -17,44 +17,56 @@
             margin-top: 20px;
         }
     </style>
+</head>
+<body>
+    <h1>Take a Deep Breath!</h1>
+    <p>Use this time to stretch, grab some water, or think if you really need to visit this site.</p>
+    <div id="countdown">Loading...</div>
+
     <script>
-        function startCountdown() {
+        document.addEventListener("DOMContentLoaded", function () {  // ✅ Ensure page is loaded first
+            console.log("Script loaded."); 
+
             const urlParams = new URLSearchParams(window.location.search);
             let seconds = 300; // Default countdown
             let targetURL = "https://www.youtube.com"; // Default redirect
 
+            console.log("Reading parameters...");
             let foundURL = false;
 
             for (let [key, value] of urlParams.entries()) {
+                console.log(`Param detected: ${key} = ${value}`);
+                
                 if (!isNaN(key)) { 
                     seconds = parseInt(key);
+                    console.log(`Countdown set to: ${seconds} seconds`);
                 }
                 if (!foundURL && key.startsWith("http")) { 
                     targetURL = key;
                     foundURL = true;
+                    console.log(`Target URL set to: ${targetURL}`);
                 }
                 if (!foundURL && value.startsWith("http")) { 
                     targetURL = value;
                     foundURL = true;
+                    console.log(`Target URL set to: ${targetURL}`);
                 }
             }
 
-            document.getElementById("countdown").innerText = seconds;
+            if (isNaN(seconds) || seconds < 1) {
+                console.log("Invalid countdown value. Defaulting to 10.");
+                seconds = 10;
+            }
 
             function updateCountdown() {
-                if (seconds > 0) {
-                    document.getElementById("countdown").innerText = seconds;
-                    seconds--;
-                    setTimeout(updateCountdown, 1000);
-                } else {
-                    console.log("Redirecting to: " + targetURL);
-                    window.location.replace(targetURL);
+                let countdownElement = document.getElementById("countdown");
+                if (!countdownElement) {
+                    console.error("Countdown element not found!");  // 🔴 Debug if the element is missing
+                    return;
                 }
-            }
-            updateCountdown();
-        }
-    </script>
-</head>
-<body onload="startCountdown()">
-    <h1>Take a Deep Breath!</h1>
-    <p>Use this time to s
+                
+                if (seconds > 0) {
+                    countdownElement.innerText = seconds;
+                    console.log(`Countdown: ${seconds}`);
+                    seconds--;
+                    setTimeout(upda
