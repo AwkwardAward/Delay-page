@@ -25,28 +25,19 @@
 
     <script>
         window.onload = function() {
-            // Check if the page has been redirected previously
-            if (getCookie('redirected') === 'true') {
-                console.log("Already redirected, bypassing countdown...");
-                return;
-            }
-
-            // Set a cookie to prevent future redirects
-            setCookie('redirected', 'true', 1); // Cookie expires after 1 day
-
             const urlParams = new URLSearchParams(window.location.search);
             let seconds = 10;  // Default countdown
-            let targetURL = "https://www.youtube.com";  // Default URL
+            let targetURL = "https://www.youtube.com";  // Default YouTube URL
 
             // Parse query parameters for countdown and target URL
-            let params = Array.from(urlParams.keys());
-            if (params.length >= 1 && !isNaN(params[0])) {
-                seconds = parseInt(params[0]);
+            if (urlParams.has('$S')) {
+                seconds = parseInt(urlParams.get('$S')); // Countdown value
             }
-            if (params.length >= 2) {
-                targetURL = params[1];
+            if (urlParams.has('$U')) {
+                targetURL = urlParams.get('$U'); // Redirect target
             }
 
+            // Update the countdown and perform the redirection
             function updateCountdown() {
                 let countdownElement = document.getElementById("countdown");
                 if (!countdownElement) {
@@ -59,34 +50,13 @@
                     seconds--;
                     setTimeout(updateCountdown, 1000);
                 } else {
-                    // Clear the 'redirected' cookie after the countdown ends
-                    setCookie('redirected', '', -1);
                     console.log(`Redirecting to: ${targetURL}`);
-                    window.location.href = targetURL; // Redirect to target
+                    window.location.href = targetURL; // Redirect back to YouTube
                 }
             }
 
             updateCountdown();
         };
-
-        // Utility functions to set and get cookies
-        function setCookie(name, value, days) {
-            const d = new Date();
-            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-            let expires = "expires=" + d.toUTCString();
-            document.cookie = name + "=" + value + ";" + expires + ";path=/";
-        }
-
-        function getCookie(name) {
-            let nameEQ = name + "=";
-            let ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
     </script>
 </body>
 </html>
